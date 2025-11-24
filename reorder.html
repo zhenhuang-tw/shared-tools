@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF 頁面排序修正工具</title>
+    <!-- 2025-11-24 使用 Gemini 3 Pro 設計 --> 
+    <!-- 1. 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 2. 載入 pdf-lib (用於 PDF 處理) -->
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    
+    <script>
+        // Tailwind CSS 設定
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+            darkMode: 'class', // 啟用暗色模式
+        }
+    </script>
+    <style>
+        /* 載入中的旋轉圖示 */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3b82f6; /* blue-500 */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        /* 拖曳檔案時的視覺提示 */
+        .drag-over {
+            border-color: #3b82f6; /* blue-500 */
+            background-color: #eff6ff; /* blue-50 */
+        }
+        .dark .drag-over {
+            background-color: #1e293b; /* slate-800 */
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-100 dark:bg-gray-900 min-h-screen flex items-center justify-center p-4">
+
+    <!-- 主要 UI 卡片 -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 sm:p-10 w-full max-w-lg">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">
+                PDF 頁面排序修正工具
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">
+                將單雙頁順序互換 (例如: 1,2 $\rightarrow$ 2,1)
+            </p>
+        </header>
+
+        <main>
+            <!-- 檔案上傳區域 -->
+            <div>
+                <!-- 將 label 設為拖放區域 -->
+                <label for="pdf-upload" id="drop-zone" class="w-full flex flex-col items-center justify-center px-6 py-10 bg-gray-50 dark:bg-gray-700 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                    <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                    <span class="mt-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+                        點擊此處上傳 PDF
+                    </span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        或將檔案拖曳至此
+                    </span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                        (所有處理均在您的瀏覽器中完成)
+                    </span>
+                </label>
+                <!-- 實際的檔案輸入框 (隱藏) -->
+                <input type="file" id="pdf-upload" class="hidden" accept="application/pdf" />
+            </div>
+
+            <!-- 檔案名稱顯示 -->
+            <div id="file-name-display" class="text-center text-sm text-gray-700 dark:text-gray-300 font-medium mt-4 h-5">
+                <!-- 檔案名稱將顯示於此 -->
+            </div>
+
+            <!-- 執行按鈕 -->
+            <button id="process-button" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg mt-6 transition-all shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center" disabled>
+                <span id="button-text">修正排序並下載</span>
+            </button>
+
+            <!-- 載入狀態顯示 -->
+            <div id="loading-state" class="hidden mt-6 flex flex-col items-center justify-center">
+                <div class="spinner"></div>
+                <span id="loading-text" class="text-gray-600 dark:text-gray-400 mt-3"></span>
+            </div>
+
+            <!-- 狀態訊息區域 -->
+            <div id="status" class="text-center text-sm text-gray-600 dark:text-gray-400 mt-4 h-5">
+                <!-- 狀態訊息將顯示於此 -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 等待 DOM 和 pdf-lib 載入完成
+        document.addEventListener('DOMContentLoaded', () => {
+            // 獲取所有互動元素的參照
+            const uploadInput = document.getElementById('pdf-upload');
+            const dropZone = document.getElementById('drop-zone');
+            
+            const processButton = document.getElementById('process-button');
+            const loadingState = document.getElementById('loading-state');
+            const loadingText = document.getElementById('loading-text');
+            const buttonText = document.getElementById('button-text');
+
+            const status = document.getElementById('status');
+            const fileNameDisplay = document.getElementById('file-name-display');
+
+            // 獲取 PDFLib 物件
+            const { PDFDocument } = PDFLib;
+
+            let selectedFile = null;
+
+            // --- 檔案處理 (點擊上傳) ---
+            uploadInput.addEventListener('change', () => {
+                if (uploadInput.files.length > 0) {
+                    handleFile(uploadInput.files[0]);
+                }
+            });
+
+            // --- 檔案處理 (拖曳上傳) ---
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault(); // 防止瀏覽器開啟檔案
+                e.stopPropagation();
+                dropZone.classList.add('drag-over');
+            });
+
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('drag-over');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('drag-over');
+
+                if (e.dataTransfer.files.length > 0) {
+                    handleFile(e.dataTransfer.files[0]);
+                    uploadInput.value = null; // 清除 input 的值
+                }
+            });
+
+            // 統一的檔案處理函式
+            function handleFile(file) {
+                if (file && file.type === 'application/pdf') {
+                    selectedFile = file;
+                    fileNameDisplay.textContent = selectedFile.name;
+                    status.textContent = '檔案準備就緒。';
+                    processButton.disabled = false;
+                } else {
+                    selectedFile = null;
+                    fileNameDisplay.textContent = '請選擇一個 PDF 檔案。';
+                    status.textContent = '';
+                    processButton.disabled = true;
+                }
+            }
+            
+            // --- 核心功能：綁定按鈕 ---
+            processButton.addEventListener('click', processPDF);
+
+            /**
+             * 執行 PDF 頁面重排序
+             */
+            async function processPDF() {
+                if (!selectedFile) return;
+
+                // 設定 UI 為載入狀態
+                setLoading(true, '正在讀取檔案...');
+
+                try {
+                    // 將檔案讀取為 ArrayBuffer
+                    const fileReader = new FileReader();
+                    fileReader.readAsArrayBuffer(selectedFile);
+
+                    fileReader.onload = async (e) => {
+                        const pdfData = e.target.result;
+
+                        try {
+                            // 1. 載入來源 PDF
+                            const srcDoc = await PDFDocument.load(pdfData);
+                            
+                            // 2. 建立新 PDF
+                            const newDoc = await PDFDocument.create();
+
+                            // 3. 計算新的頁面順序
+                            const pageCount = srcDoc.getPageCount();
+                            const newIndices = [];
+
+                            // 遍歷所有頁面，以 2 頁為一組
+                            for (let i = 0; i < pageCount; i += 2) {
+                                // 檢查是否存在下一頁 (偶數頁，index i+1)
+                                if (i + 1 < pageCount) {
+                                    // 順序互換：先加 i+1 (偶數頁)，再加 i (奇數頁)
+                                    // 例如：原本 0, 1 -> 新順序 1, 0
+                                    newIndices.push(i + 1);
+                                    newIndices.push(i);
+                                } else {
+                                    // 如果是最後一頁且沒有配對 (總頁數為奇數)，保持原位
+                                    newIndices.push(i);
+                                }
+                            }
+
+                            setLoading(true, '正在重新排序頁面...');
+
+                            // 4. 依照新順序複製頁面
+                            // copyPages 回傳的是一組可以加入新文件的頁面物件
+                            const copiedPages = await newDoc.copyPages(srcDoc, newIndices);
+
+                            // 5. 將複製的頁面加入新文件
+                            copiedPages.forEach((page) => {
+                                newDoc.addPage(page);
+                            });
+
+                            // 6. 儲存新檔案
+                            setLoading(true, '正在產生新文件...');
+                            const pdfBytes = await newDoc.save();
+
+                            // 7. 觸發下載
+                            const originalName = selectedFile.name.replace(/\.pdf$/i, '');
+                            const newFileName = `${originalName}_reordered.pdf`;
+                            downloadFile(pdfBytes, newFileName, 'application/pdf');
+
+                            // 8. 重設 UI
+                            resetUI(`成功！正在下載 ${newFileName}`);
+
+                        } catch (err) {
+                            console.error('PDF 處理過程中發生錯誤:', err);
+                            resetUI(`錯誤：${err.message}。請檢查控制台。`);
+                        }
+                    };
+
+                    fileReader.onerror = () => {
+                        resetUI('讀取檔案時發生錯誤。');
+                    };
+
+                } catch (err) {
+                    console.error('設定 FileReader 時發生錯誤:', err);
+                    resetUI(`錯誤：${err.message}。`);
+                }
+            }
+
+            // --- 輔助函式 ---
+
+            // 設定載入狀態
+            function setLoading(isLoading, message = '') {
+                if (isLoading) {
+                    loadingText.textContent = message;
+                    processButton.classList.add('hidden'); // 隱藏按鈕
+                    loadingState.classList.remove('hidden'); // 顯示載入狀態
+                    status.textContent = ''; // 清除底部狀態
+                } else {
+                    processButton.classList.remove('hidden'); // 顯示按鈕
+                    loadingState.classList.add('hidden'); // 隱藏載入狀態
+                    status.textContent = message; // 使用底部狀態顯示成功或錯誤
+                }
+            }
+
+            // 重設 UI
+            function resetUI(message) {
+                setLoading(false, message);
+                selectedFile = null;
+                uploadInput.value = null; // 清除檔案輸入
+                fileNameDisplay.textContent = '要選擇其他檔案嗎？';
+                // 重新禁用按鈕
+                processButton.disabled = true;
+            }
+
+            // 檔案下載函式
+            function downloadFile(data, fileName, mimeType) {
+                const blob = new Blob([data], { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                
+                // 建立一個暫時的 <a> 標籤來觸發下載
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                
+                // 清理
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+        });
+    </script>
+</body>
+</html>
