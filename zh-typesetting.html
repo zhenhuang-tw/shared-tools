@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漢文排版格式化工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* 自定義捲軸樣式 */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; 
+            border-radius: 20px;
+        }
+        .dark textarea::-webkit-scrollbar-thumb {
+            background-color: #475569; 
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-200 transition-colors duration-200 flex flex-col">
+
+    <!-- 頂部導航列 -->
+    <nav class="bg-white dark:bg-gray-800 shadow-sm px-6 py-4 flex justify-between items-center z-10">
+        <h1 class="text-xl font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            漢文排版格式化工具
+        </h1>
+        <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <!-- 太陽圖示 (深色模式顯示) -->
+            <svg id="sun-icon" class="w-5 h-5 hidden dark:block text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <!-- 月亮圖示 (淺色模式顯示) -->
+            <svg id="moon-icon" class="w-5 h-5 block dark:hidden text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 24a9 9 0 01-9 9 9 9 0 019-9z" transform="translate(-2 -2)"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path></svg>
+        </button>
+    </nav>
+
+    <!-- Breadcrumb (麵包屑) -->
+    <div class="w-full max-w-7xl mx-auto px-4 md:px-6 mt-4">
+        <nav aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-1.5 text-sm text-gray-500 dark:text-gray-400">
+                <li>
+                    <a href="index.html" class="hover:underline hover:text-blue-500 dark:hover:text-blue-400">
+                        工具盒首頁
+                    </a>
+                </li>
+                <li>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </li>
+                <li>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">漢文排版格式化</span>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- 主要內容區 -->
+    <main class="flex-grow p-4 md:p-6 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-[1fr_280px_1fr] gap-6">
+        
+        <!-- 左側：輸入區 -->
+        <div class="flex flex-col h-[calc(100vh-220px)] min-h-[500px]">
+            <label for="input-text" class="mb-2 font-semibold text-gray-700 dark:text-gray-300 flex justify-between">
+                <span>原始文字輸入</span>
+                <button id="clear-btn" class="text-xs text-red-500 hover:text-red-600 dark:hover:text-red-400">清空內容</button>
+            </label>
+            <textarea id="input-text" class="flex-grow w-full p-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none shadow-sm text-base leading-relaxed placeholder-gray-400 dark:placeholder-gray-600" placeholder="請在此貼上文字...本工具係為中文 OCR 辨識後，處理排版格式而設計"></textarea>
+        </div>
+
+        <!-- 中間：控制面板 -->
+        <div class="flex flex-col gap-4 h-full justify-center">
+            
+            <div class="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 space-y-6">
+                
+                <!-- 選項 1: 斷行處理 -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                        1. 斷行
+                    </h3>
+                    <div class="space-y-2">
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <input type="radio" name="line-break" value="none" class="mt-1 form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                            <span class="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200">保留原始斷行</span>
+                        </label>
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <!-- 預設: 一律取消 -->
+                            <input type="radio" name="line-break" value="all" checked class="mt-1 form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                            <span class="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200">一律取消斷行</span>
+                        </label>
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <input type="radio" name="line-break" value="smart" class="mt-1 form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                            <span class="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200">
+                                公文書模式
+                                <span class="block text-xs text-gray-400 dark:text-gray-500 mt-0.5">保留 壹、一、(一)、1.、(1) 前的換行</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <hr class="border-gray-200 dark:border-gray-700">
+
+                <!-- 選項 2: 標點符號 -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
+                        2. 標點符號
+                    </h3>
+                    <div class="space-y-2">
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <input type="radio" name="punctuation" value="none" class="mt-1 form-radio text-purple-600 focus:ring-purple-500 h-4 w-4 border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                            <span class="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200">保留原始全半形</span>
+                        </label>
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <input type="radio" name="punctuation" value="simple" class="mt-1 form-radio text-purple-600 focus:ring-purple-500 h-4 w-4 border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                            <span class="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200">
+                                一般標點轉全形
+                                <span class="block text-xs text-gray-400 dark:text-gray-500 mt-0.5">逗號、分號、冒號等</span>
+                            </span>
+                        </label>
+                        <label class="flex items-start space-x-3 cursor-pointer group">
+                            <!-- 預設: 全部轉換 -->
+                            <input type="radio" name="punctuation" value="aggressive" checked class="mt-1 form-radio text-purple-600 focus:ring-purple-500 h-4 w-4 border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                            <span class="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200">
+                                所有標點轉全形
+                                <span class="block text-xs text-gray-400 dark:text-gray-500 mt-0.5">含括號，但半形句點 (.) 原樣保留</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <hr class="border-gray-200 dark:border-gray-700">
+
+                <!-- 選項 3: 空格處理 -->
+                <div>
+                    <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        3. 其它
+                    </h3>
+                    <label class="flex items-center space-x-3 cursor-pointer group">
+                        <!-- 預設: 勾選 -->
+                        <input type="checkbox" id="remove-spaces" checked class="form-checkbox text-green-600 focus:ring-green-500 h-4 w-4 rounded border-gray-300 dark:border-gray-600 dark:bg-gray-700">
+                        <span class="text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-200">
+                            刪除所有空格
+                            <span class="block text-xs text-gray-400 dark:text-gray-500 mt-0.5">智慧辨識：保留拉丁字母間空格</span>
+                        </span>
+                    </label>
+                </div>
+
+                <!-- 執行按鈕 -->
+                <button id="process-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-lg transition transform active:scale-95 flex items-center justify-center gap-2">
+                    <span>排版！</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- 右側：輸出區 -->
+        <div class="flex flex-col h-[calc(100vh-220px)] min-h-[500px]">
+            <label for="output-text" class="mb-2 font-semibold text-gray-700 dark:text-gray-300 flex justify-between items-center">
+                <span>格式化結果</span>
+                <span id="copy-feedback" class="text-xs text-green-500 hidden font-bold">已複製！</span>
+            </label>
+            <div class="relative flex-grow">
+                <textarea id="output-text" readonly class="w-full h-full p-4 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 focus:outline-none resize-none shadow-sm text-base leading-relaxed" placeholder="結果將顯示於此..."></textarea>
+                
+                <!-- 複製按鈕 (懸浮) -->
+                <button id="copy-btn" class="absolute bottom-4 right-4 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 px-4 py-2 rounded-lg shadow-sm font-medium flex items-center gap-2 transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                    複製文字
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="text-center py-6">
+         <p class="text-xs text-gray-500 dark:text-gray-400">
+            所有處理均在您的瀏覽器本機完成，檔案不會上傳至任何伺服器。
+         </p>
+         <!-- GitHub 連結 -->
+         <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+            <a href="https://github.com/jenhuang-tw/shared-tools" class="hover:underline hover:text-blue-500 dark:hover:text-blue-400">
+                在 GitHub 上查看原始碼
+            </a>
+         </p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputText = document.getElementById('input-text');
+            const outputText = document.getElementById('output-text');
+            const processBtn = document.getElementById('process-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const themeToggle = document.getElementById('theme-toggle');
+            const copyFeedback = document.getElementById('copy-feedback');
+
+            // --- 核心邏輯 ---
+
+            processBtn.addEventListener('click', () => {
+                let raw = inputText.value;
+                if (!raw) return;
+
+                // 1. 斷行處理
+                const lineBreakOption = document.querySelector('input[name="line-break"]:checked').value;
+                
+                if (lineBreakOption === 'all') {
+                    // 全部合併
+                    raw = raw.replace(/\n/g, '');
+                } else if (lineBreakOption === 'smart') {
+                    // 智慧合併
+                    // 邏輯：將文字分行。
+                    // 檢查每一行，如果該行開頭符合特定標題格式，則保留該行前的換行符號。
+                    // 否則，該行與前一行合併。
+                    
+                    const lines = raw.split('\n');
+                    let processed = '';
+                    
+                    // Regex 定義標題：壹、|一、| (一) | 1. | (1)
+                    // 注意：\s* 允許標題前有縮排
+                    const headerRegex = /^\s*(壹、|一、|\(\s*一\s*\)|1\.|【|（\s*一\s*）|\(\s*1\s*\))/;
+
+                    if (lines.length > 0) {
+                        // 加入第一行 (去除前後空白)
+                        processed = lines[0].trim();
+                        
+                        for (let i = 1; i < lines.length; i++) {
+                            const currentLine = lines[i].trim();
+                            if (!currentLine) continue; // 跳過空行
+
+                            if (headerRegex.test(currentLine)) {
+                                // 如果是標題，前面加換行
+                                processed += '\n' + currentLine;
+                            } else {
+                                // 如果不是標題，直接接在後面
+                                processed += currentLine;
+                            }
+                        }
+                    }
+                    raw = processed;
+                }
+
+                // 2. 標點轉全形處理
+                const punctOption = document.querySelector('input[name="punctuation"]:checked').value;
+                
+                // 定義轉換表
+                const fullWidthMap = {
+                    ',': '，', ';': '；', ':': '：', '?': '？', '!': '！',
+                    // 以下為 aggressive 模式可能用到的
+                    '(': '（', ')': '）', '[': '【', ']': '】', '{': '｛', '}': '｝'
+                };
+
+                if (punctOption === 'simple') {
+                    // 轉換半形標點 (除了括號)
+                    raw = raw.replace(/[,;:?!]/g, (m) => fullWidthMap[m]);
+                } else if (punctOption === 'aggressive') {
+                    // 轉換所有標點 (含括號)，但半形句點 (.) 保留
+                    // 我們使用 regex 匹配所有在 map 中的鍵
+                    // 這裡不包含 '.'
+                    raw = raw.replace(/[,;:?!\(\)\[\]\{\}]/g, (m) => fullWidthMap[m]);
+                }
+
+                // 3. 空格處理
+                const removeSpaces = document.getElementById('remove-spaces').checked;
+                if (removeSpaces) {
+                    // 邏輯：
+                    // A. 先將 "英文字母 空格 英文字母" 這種模式的空格，替換成一個特殊的暫存符號
+                    //    這樣我們等一下全刪空格時，就不會誤刪英文單字間的空格
+                    raw = raw.replace(/([a-zA-Z])\s+([a-zA-Z])/g, '$1__TEMP_SPACE__$2');
+                    
+                    // B. 刪除所有剩餘的空白字符 (包含全形空格 \u3000)
+                    raw = raw.replace(/\s+/g, '');
+                    
+                    // C. 將暫存符號還原為半形空格
+                    raw = raw.replace(/__TEMP_SPACE__/g, ' ');
+                }
+
+                outputText.value = raw;
+            });
+
+            // --- 輔助功能 ---
+
+            // 複製功能
+            copyBtn.addEventListener('click', () => {
+                outputText.select();
+                outputText.setSelectionRange(0, 99999); // Mobile compatibility
+                navigator.clipboard.writeText(outputText.value).then(() => {
+                    copyFeedback.classList.remove('hidden');
+                    setTimeout(() => {
+                        copyFeedback.classList.add('hidden');
+                    }, 2000);
+                });
+            });
+
+            // 清空功能
+            clearBtn.addEventListener('click', () => {
+                if(confirm('確定要清空輸入框嗎？')) {
+                    inputText.value = '';
+                    inputText.focus();
+                }
+            });
+
+            // 深色模式切換邏輯
+            // 初始化：檢查系統偏好或 localStorage
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            // 按鈕點擊
+            themeToggle.addEventListener('click', () => {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
