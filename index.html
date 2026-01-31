@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<!-- 語言設定為繁體中文 -->
 <html lang="zh-Hant" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>工具盒首頁</title>
-    <!-- 1. 載入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <script>
@@ -79,16 +77,42 @@
                     </div>
                 </a>
 
-                <!-- 卡片 3: 工具箱 (範例) -->
-                <a href="#" 
+                <!-- 卡片 3:  -->
+                <a href="search.html" 
+                   class="tool-card flex items-center p-5 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 hover:bg-gray-100">
+                    <!-- 圖示 -->
+                    <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-blue-100 dark:bg-blue-900 rounded-lg text-blue-600 dark:text-blue-300">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1.586-1.586a2 2 0 010-2.828L16 8M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1.586-1.586a2 2 0 010-2.828L16 8m-6 8h.01M4 20h16a2 2 0 002-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">資料搜尋</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">字典/法律資料</p>
+                    </div>
+                </a>
+
+                <!-- 卡片 4 -->
+                <a href="./ntpu-course-query/" 
                    class="tool-card flex items-center p-5 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 hover:bg-gray-100 opacity-60 cursor-not-allowed">
                     <!-- 圖示 -->
                     <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded-lg text-gray-600 dark:text-gray-400">
                         <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1.586-1.586a2 2 0 010-2.828L16 8M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1.586-1.586a2 2 0 010-2.828L16 8m-6 8h.01M4 20h16a2 2 0 002-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                     </div>
                     <div class="ml-4">
-                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">工具箱2 (即將推出)</h2>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">功能：敬請期待</p>
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">臺北大學課程查詢</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">響應式設計的課程查詢系統</p>
+                    </div>
+                </a>
+
+                <!-- 卡片5 -->
+                <a href="punctuation.html" 
+                   class="tool-card flex items-center p-5 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 dark:hover:bg-gray-600 hover:bg-gray-100">
+                    <!-- 圖示 -->
+                    <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-blue-100 dark:bg-blue-900 rounded-lg text-blue-600 dark:text-blue-300">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1.586-1.586a2 2 0 010-2.828L16 8M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l-1.586-1.586a2 2 0 010-2.828L16 8m-6 8h.01M4 20h16a2 2 0 002-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">常用符號</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">製作筆記時需要，打字打不出來的符號</p>
                     </div>
                 </a>
 
@@ -97,10 +121,10 @@
         
         <footer class="text-center mt-8">
              <p class="text-xs text-gray-500 dark:text-gray-400">
-                Jen HUANG
+                Zane
              </p>
              <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                <a href="https://github.com/jenhuang-tw/shared-tools" class="hover:underline hover:text-blue-500 dark:hover:text-blue-400">
+                <a href="https://github.com/huang-zane/shared-tools" class="hover:underline hover:text-blue-500 dark:hover:text-blue-400">
                     在 GitHub 上查看原始碼
                 </a>
              </p>
