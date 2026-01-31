@@ -1,0 +1,255 @@
+
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>法學資料檢索</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- 核心：Tocas UI -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.5/tocas.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.5/tocas.min.js"></script>
+  <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png" />
+</head>
+<body>
+
+<div class="ts-container">
+<div class="ts-space"></div>
+<div class="ts-content is-tertiary is-vertically-very-padded">
+    <div class="ts-center">
+        <div class="ts-header is-large">輕鬆檢索法學資料</div>
+        <div class="ts-text is-secondary">一個網頁，查裁判與法規。</div>
+    </div>
+</div>
+<div class="ts-space"></div>
+</div>
+
+		<div class="ts-container">
+		<div class="ts-breadcrumb is-divided is-secondary">
+			<a class="item" href="./index.html">
+				<span class="ts-icon is-house-icon"></span>
+			</a>
+			<a class="item" href="./search.html">
+				資料搜尋
+			</a>
+			<a class="item is-active">
+				法學資料檢索
+			</a>
+		</div>
+		</div>
+		
+		<div class="ts-space"></div>
+
+<div class="ts-container">
+
+<div class="ts-tab is-pilled">
+    <button class="item is-active" data-tab="cons">憲法法庭</button>
+    <button class="item" data-tab="judg">法院裁判</button>
+    <button class="item" data-tab="law">全國法規</button>
+</div>
+<div class="ts-segment" data-name="cons">
+
+	
+    <div class="ts-header">憲法法庭判決 (憲判字)</div>
+	<div class="ts-space"></div>
+	
+	<form action="https://cons.judicial.gov.tw/docredirect.aspx" target="_blank" id="consJudg">
+	<!-- https://cons.judicial.gov.tw/docredirect.aspx?type=2&year=113&word=%e6%86%b2%e5%88%a4&no=4 -->
+	
+	<div class="ts-grid">
+		<div class="column">
+			<div class="ts-select">
+				<select name="year" form="consJudg">
+					<option value="115">115年</option>
+					<option value="114">114年</option>
+					<option value="113">113年</option>
+					<option value="112">112年</option>
+					<option value="111">111年</option>
+				</select>
+			</div>
+		</div>
+		<div class="column has-hidden">
+			<div class="ts-input is-disabled">
+				<input type="text" value="憲判字" disabled style="width: 6em;" />
+				<input type="hidden" name="word" value="憲判" />
+				<input type="hidden" name="type" value="2" />
+			</div>
+		</div>
+		<div class="column is-fluid">
+			<div class="ts-input">
+				<input type="number" placeholder="第「...」號" name="no" required />
+			</div>
+		</div>
+		<div class="column">
+			<input type="submit" class="ts-button" value="送出" />
+		</div>
+	</div>
+	</form>
+	<div class="ts-space"></div>
+	<div class="ts-text is-end-aligned"><p><a class="ts-text is-external-link" href="https://cons.judicial.gov.tw/judcurrentNew1.aspx?fid=38">憲法法庭判決</a> (列表)</p></div>
+	
+	
+
+    
+	<div class="ts-divider is-section"></div>
+	
+	<div class="ts-header">大法官解釋</div>
+	<div class="ts-space"></div>
+	
+	<form action="https://cons.judicial.gov.tw/docredirect.aspx" method="get" target="_blank">
+	<input type="hidden" name="type" value="1" />
+	
+	<div class="ts-grid">
+		<div class="column is-fluid">
+			<div class="ts-input is-start-icon">
+				<span class="ts-icon is-magnifying-glass-icon"></span>
+				<input type="number" name="no" placeholder="直接輸入：釋字第「...」號" required />
+			</div>
+		</div>
+		<div class="column">
+			<input type="submit" class="ts-button" value="送出" />
+		</div>
+	</div>
+	
+	</form>
+	
+	<div class="ts-space"></div>
+	<div class="ts-text is-end-aligned"><p><a class="ts-text is-external-link" href="https://cons.judicial.gov.tw/judcurrent.aspx?fid=2195">大法官解釋</a> (列表)</p></div>
+	
+	
+</div>
+<div class="ts-segment" data-name="judg">
+    <div class="ts-header">裁判書查詢</div>
+	<div class="ts-space"></div>
+	
+	<!-- https://judgment.judicial.gov.tw/FJUD/qryresult.aspx?jud_sys=M&judtype=&jud_court=PCD&jud_year=111&jud_case=%E7%B0%A1&jud_no=823 -->
+	
+	<!--
+	 https://judgment.judicial.gov.tw/LAW_Mobile_FJUD/FJUD/qryresult.aspx?judtype=JUDBOOK&kw=關鍵字&sys=A&jud_court= 
+	 -->
+	 
+	 
+	<!-- 電腦版 -->
+	<div class="mobile:has-hidden">
+		<form action="https://judgment.judicial.gov.tw/FJUD/qryresult.aspx" method="get" target="_blank">	
+			<div class="ts-grid">
+				<div class="column is-fluid">
+					<div class="ts-input is-start-icon">
+						<span class="ts-icon is-magnifying-glass-icon"></span>
+						<input type="text" name="akw" placeholder="法院名稱、裁判案號、案由、全文檢索字詞..." required />
+					</div>
+				</div>
+				<div class="column">
+					<input type="submit" class="ts-button" value="搜尋" />
+				</div>
+			</div>
+		</form>
+	</div>
+	 
+	<!-- 行動版 -->
+	<div class="tablet+:has-hidden">
+		<form action="https://judgment.judicial.gov.tw/LAW_Mobile_FJUD/FJUD/qryresult.aspx" method="get" target="_blank">	
+			<div class="ts-grid">
+				<div class="column is-fluid">
+					<div class="ts-input is-start-icon">
+						<span class="ts-icon is-magnifying-glass-icon"></span>
+						<input type="text" name="kw" placeholder="關鍵字..." required />
+					</div>
+				</div>
+				<div class="column">
+					<input type="submit" class="ts-button" value="搜尋" />
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	
+	<div class="ts-space"></div>
+	<div class="ts-text is-end-aligned"><p><a class="ts-text is-external-link" href="https://judgment.judicial.gov.tw/">司法院法學資料檢索系統 - 裁判書系統</a></p></div>
+</div>
+<div class="ts-segment" data-name="law">
+    
+	
+	<div class="ts-header">全國法規資料庫 - 中央法規</div>
+	<div class="ts-space"></div>
+	<form action="https://law.moj.gov.tw/Law/LawSearchResult.aspx" method="get" target="_blank">
+	<div class="ts-grid">
+		
+		
+		
+		<div class="column is-fluid">
+			<div class="ts-input is-start-icon">
+				<span class="ts-icon is-magnifying-glass-icon"></span>
+				<input type="text" name="kw" placeholder="輸入法規的名稱" required />
+				<input type="hidden" name="cur" value="Ln" />
+				<input type="hidden" name="ty" value="LAW" />
+			</div>
+		</div>
+		<div class="column">
+			<input type="submit" class="ts-button" value="送出" />
+		</div>
+		
+		
+		
+	</div>
+	</form>
+	<div class="ts-space"></div>
+	<div class="ts-text is-end-aligned"><p><a class="ts-text is-external-link" href="https://law.moj.gov.tw/Law/LawSearchLaw.aspx">中央法規 - 全國法規資料庫</a></p></div>
+	
+	<div class="ts-header">常用六法「編章節」目錄</div>
+	<div class="ts-space"></div>
+	<div class="ts-meta is-secondary is-start-aligned">
+		<a class="item" href="https://law.moj.gov.tw/LawClass/LawAllPara.aspx?pcode=B0000001">民法</a>
+		<a class="item" href="https://law.moj.gov.tw/LawClass/LawAllPara.aspx?pcode=B0010048">家事</a>
+		<a class="item" href="https://law.moj.gov.tw/LawClass/LawAllPara.aspx?pcode=B0010001">民訴</a>
+		<a class="item" href="https://law.moj.gov.tw/LawClass/LawAllPara.aspx?pcode=A0030159">憲訴</a>
+		<a class="item" href="https://law.moj.gov.tw/LawClass/LawAllPara.aspx?pcode=A0030055">行程</a>
+		<a class="item" href="https://law.moj.gov.tw/LawClass/LawAllPara.aspx?pcode=A0030154">行訴</a>
+		<a class="item" href="https://law.moj.gov.tw/LawClass/LawAllPara.aspx?pcode=C0000001">刑法</a>
+		<a class="item" href="https://law.moj.gov.tw/LawClass/LawAllPara.aspx?pcode=C0010001">刑訴</a>
+	</div>
+	
+	
+	
+	
+	<div class="ts-divider is-section"></div>
+	
+	<div class="ts-header">立法院法律系統</div>
+	<div class="ts-text">民國59年以後的立法理由
+		<span class="ts-text is-negative">(因技術問題，現無法使用)</span></div>
+	<div class="ts-space"></div>
+	<form action="https://lis.ly.gov.tw/lglawc/lglawkm?@@795158449" method="post" target="_blank">
+	
+	<div class="ts-grid">
+		
+		
+		
+		<div class="column is-fluid">
+			<div class="ts-input is-start-icon">
+				<span class="ts-icon is-magnifying-glass-icon"></span>
+				<input type="text" name="_1_6_T" placeholder="輸入法規的名稱" disabled required />
+				<input type="hidden" name="@_1_6_T" value="T_LN/LW" />
+				<input type="hidden" name="INFO" value="005F2D610000210100000000000000A001000000000000000" />
+			</div>
+		</div>
+		<div class="column">
+			<input type="submit" class="ts-button" value="送出" disabled />
+		</div>
+	</div>
+		
+		
+		
+		
+	</form>
+	<div class="ts-space"></div>
+	<div class="ts-text is-end-aligned"><p><a class="ts-text is-external-link" href="https://lis.ly.gov.tw/lglawc/lglawkm">立法院法律系統</a></p></div>
+	
+	
+	
+</div>
+
+</div>
+
+<!-- Zane 2024-05-20 -->
+</body>
+</html>

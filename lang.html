@@ -1,0 +1,147 @@
+
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>字典查詢</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.5/tocas.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocas/4.2.5/tocas.min.js"></script>
+  <style type="text/css">
+    html {
+        /** 設定領銜主色 */
+        --ts-accent-color: #00ADEA;
+    }
+</style><link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png" />
+</head>
+<body>
+
+<div class="ts-container">
+<!--<div class="ts-content">-->
+<div class="ts-wrap is-vertical">
+		
+		<div class="ts-space is-small"></div>
+
+		<div class="ts-content is-tertiary is-vertically-very-padded">
+			<div class="ts-center">
+				<div class="ts-header is-large">字典查詢</div>
+				<div class="ts-text is-secondary">英文、法文、日文一次滿足</div>
+			</div>
+		</div>
+
+		<div class="ts-breadcrumb is-divided is-secondary">
+			<a class="item" href="./index.html">
+				<span class="ts-icon is-house-icon"></span>
+			</a>
+			<a class="item" href="./search.html">
+				資料搜尋
+			</a>
+			<a class="item is-active">
+				字典查詢
+			</a>
+		</div>
+		
+<div class="ts-grid mobile:is-stacked is-evenly-divided is-stretched">
+
+	<div class="column">
+		<div class="column">
+			<div class="ts-content">
+				<div class="ts-header is-large is-start-icon">
+					<span class="ts-flag is-united-kingdom-flag is-end-spaced"></span>
+					<span lang="en">English</span>
+				</div>
+				<div class="ts-divider is-section"></div>
+				<div class="ts-header"><span lang="en">Cambridge En-Zh</span></div>
+				<form action="https://dictionary.cambridge.org/zht/%E6%90%9C%E7%B4%A2/英語-漢語-繁體/direct/" method="get" target="_blank" id="en-cam">
+				<div class="ts-grid">
+					<div class="column is-fluid">
+						<div class="ts-input">
+							<input autocomplete="off" type="text" required name="q" class="input"  />
+						</div>
+					</div>
+					<div class="column">
+						<button class="ts-button" type="submit" form="en-cam">搜尋</button>
+					</div>
+				</div><!-- end search box grid -->
+				</form>
+				<div class="ts-space"></div>
+				<div class="ts-header"><span lang="en">Longman</span></div>
+				<form action="https://www.ldoceonline.com/search/english/direct/" method="get" target="_blank" id="en-lm">
+				<div class="ts-grid">
+					<div class="column is-fluid">
+						<div class="ts-input">
+							<input autocomplete="off" type="text" required name="q" class="input"  />
+						</div>
+					</div>
+					<div class="column">
+						<button class="ts-button" type="submit" form="en-lm">搜尋</button>
+					</div>
+				</div><!-- end search box grid -->
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="column">
+		<div class="column">
+			<div class="ts-content">
+				<div class="ts-header is-large is-start-icon">
+					<span class="ts-flag is-fr-flag is-end-spaced"></span>
+					<span lang="fr">français</span>
+				</div>
+				<div class="ts-divider is-section"></div>
+				<div class="ts-header"><span lang="en">Cambridge Fr-En</span></div>
+				<form action="https://dictionary.cambridge.org/zht/搜索/法語-英語/direct/" method="get" target="_blank" id="fr-cam">
+				<div class="ts-grid">
+					<div class="column is-fluid">
+						<div class="ts-input">
+							<input autocomplete="off" type="text" required name="q" class="input"  />
+						</div>
+					</div>
+					<div class="column">
+						<button class="ts-button" type="submit" form="fr-cam">搜尋</button>
+					</div>
+				</div><!-- end search box grid -->
+				</form>
+				<div class="ts-space"></div>
+				<div class="ts-header">法語助手</div>
+				<button class="ts-button is-accent" type="button" onclick="window.open('https://www.frdic.com/');">法語助手</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="column">
+		<div class="column">
+			<div class="ts-content">
+				<div class="ts-header is-start-icon is-large">
+					<span class="ts-flag is-japan-flag is-end-spaced"></span>
+					<span lang="ja">日本語</span>
+				</div>
+				<div class="ts-divider is-section"></div>
+				<div class="ts-header"><span lang="en">Longman Ja-En</span></div>
+				<form action="https://www.ldoceonline.com/search/japanese-english/direct/" method="get" target="_blank" id="ja-lm">
+				<div class="ts-grid">
+					<div class="column is-fluid">
+						<div class="ts-input">
+							<input autocomplete="off" type="text" required name="q" class="input"  />
+						</div>
+					</div>
+					<div class="column">
+						<button class="ts-button" type="submit" form="ja-lm">搜尋</button>
+					</div>
+				</div><!-- end search box grid -->
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+</div><!-- end grid -->
+</div><!-- end wrap -->
+
+<!--</div> end content -->
+</div><!-- end container -->
+<!-- Zane 2024-03-15 (原版本) 2024-06-09 (Tocas UI 樣式) -->
+</body>
+</html>
