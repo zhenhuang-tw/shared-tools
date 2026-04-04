@@ -84,6 +84,7 @@ defineEmits<{
   transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
   cursor: default;
   height: 100%;
+  text-align: left;
 }
 
 .tool-card--clickable {
