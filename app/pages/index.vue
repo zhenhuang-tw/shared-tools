@@ -117,8 +117,8 @@ const tools: LocalToolDef[] = [
     title: '資料搜尋',
     description: '字典／法律資料',
     children: [
-      { to: '/search/dictionary', label: '字典查詢', description: '教育部國語辭典等詞典資料庫' },
-      { to: '/search/law', label: '法律資料查詢', description: '法條、判決全文搜尋' },
+      { to: '/dictionary', label: '語言學習', description: '快速查英文、法文、日文字典 ' },
+      { to: '/search-juris', label: '法學資料檢索', description: '一個頁面，查法規和裁判' },
     ],
   },
   {
