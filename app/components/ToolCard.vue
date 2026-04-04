@@ -144,7 +144,7 @@ defineEmits<{
   display: block;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--pico-color);
+  color: var(--pico-contrast, var(--pico-h5-color, #1f2937));
   margin-bottom: 0.2rem;
   white-space: nowrap;
   overflow: hidden;
