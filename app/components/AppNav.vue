@@ -8,7 +8,7 @@
     <ul>
       <li>
         <a
-          href="https://github.com/zhenhuang-tw/shared-tools"
+          :href="appConfig.site.githubUrl"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="GitHub"
@@ -33,6 +33,8 @@
 </template>
 
 <script setup lang="ts">
+const appConfig = useAppConfig()
+
 const isDark = ref(false)
 
 // 初始化：讀取系統偏好或本地儲存
