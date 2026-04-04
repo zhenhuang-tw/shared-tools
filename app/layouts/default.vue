@@ -2,7 +2,7 @@
   <div class="app-shell">
     <AppNav />
     <div class="app-body">
-      <AppBreadcrumb />
+      <AppBreadcrumb class="container" />
       <main class="container">
         <slot />
       </main>

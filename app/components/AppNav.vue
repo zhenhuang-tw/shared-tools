@@ -2,7 +2,7 @@
   <nav class="app-nav">
     <ul>
       <li>
-        <NuxtLink to="/" class="nav-brand">🧰 工具盒</NuxtLink>
+        <NuxtLink to="/" class="nav-brand">{{ appConfig.site.name }}</NuxtLink>
       </li>
     </ul>
     <ul>
