@@ -7,13 +7,15 @@
         <slot />
       </main>
     </div>
-    <AppFooter />
+    <AppFooter class="container" />
   </div>
 </template>
 
 <style>
-/* Nav 高度補償，避免內容被蓋住 */
+
 .app-body {
+  /* Nav 高度補償，避免內容被蓋住 */
   padding-top: 4rem;
+  padding-bottom: 2rem;
 }
 </style>
