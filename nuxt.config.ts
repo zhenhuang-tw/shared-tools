@@ -10,7 +10,7 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'zh-TW'
       },
-      title: '個人工具盒',
+      titleTemplate: '%s - Zhen Toolkit',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
