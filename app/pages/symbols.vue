@@ -11,7 +11,7 @@
         <button
           v-for="symbol in group.symbols"
           :key="symbol"
-          class="symbol-btn outline"
+          class="symbol-btn secondary outline"
           :aria-label="`複製 ${symbol}`"
           :class="{ copied: lastCopied === symbol }"
           @click="copy(symbol)"
