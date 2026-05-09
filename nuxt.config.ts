@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   ssr: false, // 純靜態輸出
   
   app: {
+    baseURL: '/labs/shared-tools', 
     head: {
       htmlAttrs: {
         lang: 'zh-TW'
