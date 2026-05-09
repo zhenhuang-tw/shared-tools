@@ -136,10 +136,11 @@ const tools: LocalToolDef[] = [
   },
   {
     id: 'printlaw',
-    to: '/printlaw',
+    to: '/Gesetz',
     icon: IconLaw,
     title: '極簡法典',
-    description: '法條本瀏覽',
+    description: '司律二試/執行官所附法條，每年五月更新',
+    comingSoon: true,
   },
   {
     id: 'courses',
