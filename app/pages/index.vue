@@ -139,7 +139,7 @@ const tools: LocalToolDef[] = [
     to: '/Gesetz',
     icon: IconLaw,
     title: '極簡法典',
-    description: '司律二試/執行官所附法條，每年五月更新',
+    description: '司律二試/執行官所附法條，每月更新',
     comingSoon: true,
   },
   {
