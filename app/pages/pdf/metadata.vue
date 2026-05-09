@@ -275,6 +275,9 @@ useSeoMeta({
   description: pageDesc,
   ogDescription: pageDesc,
 })
+definePageMeta({
+  breadcrumb: pageTitle
+})
 </script>
 
 <style scoped>
