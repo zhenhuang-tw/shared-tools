@@ -2,8 +2,18 @@
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  ssr: false, // 純靜態輸出
+  devtools: { enabled: false },
+
+  // 為了靜態生成 (SSG)，啟用 SSR，這樣 nuxt generate 才能產出 HTML
+  ssr: true,
+
+  nitro: {
+    preset: 'github_pages',
+    prerender: {
+      crawlLinks: true, // 確保爬蟲抓取所有連結頁面
+      failOnError: false, // 容許部分資源錯誤（如外部圖片）而不中斷部署
+    }
+  },
   
   app: {
     baseURL: '/labs/shared-tools', 
