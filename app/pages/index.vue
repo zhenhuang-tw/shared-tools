@@ -44,6 +44,9 @@
 import { h, type Component } from 'vue'
 import type { ToolDef } from '~/types/tool'
 
+const appConfig = useAppConfig()
+useHead({ title: 'Tool List' })
+
 // ── SVG icon 定義（functional component，避免污染 template） ──
 
 const IconPdf: Component = () =>
@@ -97,11 +100,14 @@ const tools: LocalToolDef[] = [
     id: 'pdf',
     icon: IconPdf,
     title: 'PDF 工具箱',
-    description: '分割、旋轉或編輯 PDF 的 Metadata',
+    description: '均於瀏覽器端處理，維護資安',
     children: [
-      { to: '/pdf/split', label: '分割 PDF', description: '依頁碼或範圍切割檔案' },
-      { to: '/pdf/rotate', label: '旋轉頁面', description: '校正掃描方向' },
-      { to: '/pdf/metadata', label: '編輯 Metadata', description: '修改標題、作者等資訊' },
+      { to: '/pdf/merge', label: '合併 PDFs', description: '支援多檔案，且容許調整次序' },
+      { to: '/pdf/metadata', label: '編輯 Metadata', description: '修改標題、作者等元資訊及檔名' },
+      { to: '/pdf/extract', label: '擷取 PDF 頁面', description: '從多頁 PDF 中分離出您指定的特定頁碼範圍' },
+      { to: '/pdf/rotate', label: '旋轉頁面', description: '可旋轉 90, 180, 270 度' },
+      { to: '/pdf/swap', label: 'PDF 頁面排序修正', description: '將單雙頁順序互換 (例如: 1,2 → 2,1)' },
+      { to: '/pdf/halve', label: '對半裁切 PDF', description: '把雙頁掃描的 PDF 裁切成單頁' },
     ],
   },
   {
@@ -145,8 +151,6 @@ const tools: LocalToolDef[] = [
 ]
 
 // ── Modal 控制 ──
-
-const appConfig = useAppConfig()
 
 // 用 Map 儲存各 modal ref
 const modalRefs = new Map<string, { open: () => void } | null>()
