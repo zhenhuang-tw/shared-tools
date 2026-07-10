@@ -99,6 +99,7 @@
 definePageMeta({
   breadcrumb: '漢文排版格式化'
 })
+useHead({ title: '漢文排版格式化' })
 
 // --- 狀態 ---
 const inputText = ref('')
