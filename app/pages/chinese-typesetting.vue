@@ -24,6 +24,8 @@
       <div class="control-panel">
         <article>
 
+          <button @click="process">排版！</button>
+
           <!-- 1. 斷行 -->
           <section>
             <h2>1. 斷行</h2>
@@ -74,8 +76,6 @@
               <small>智慧辨識：保留拉丁字母間空格</small>
             </label>
           </section>
-
-          <button @click="process">排版！</button>
 
         </article>
       </div>
