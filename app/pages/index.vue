@@ -136,18 +136,18 @@ const tools: LocalToolDef[] = [
   },
   {
     id: 'printlaw',
-    to: '/Gesetz',
+    to: 'https://weblaw.zhenhuang.tw/',
     icon: IconLaw,
     title: '極簡法典',
-    description: '司律二試/執行官所附法條，每月更新',
-    comingSoon: true,
+    description: '常見國考需適用法條',
   },
   {
     id: 'courses',
+    to: 'https://ntpu-course-search.pages.dev/',
     icon: IconCourses,
     title: '臺北大學課程查詢',
     description: '響應式設計的課程查詢系統',
-    comingSoon: true,
+    // comingSoon: true,
   },
 ]
 
