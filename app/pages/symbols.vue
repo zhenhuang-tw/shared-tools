@@ -31,6 +31,7 @@
 definePageMeta({
   breadcrumb: '常用符號表'
 })
+useHead({ title: '常用符號表' })
 
 const lastCopied = ref('')
 let toastTimer: ReturnType<typeof setTimeout>
