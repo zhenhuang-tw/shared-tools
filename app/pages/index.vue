@@ -136,7 +136,7 @@ const tools: LocalToolDef[] = [
   },
   {
     id: 'printlaw',
-    to: 'https://weblaw.zhenhuang.tw/',
+    to: 'https://lex-hare.github.io/statute-reader/',
     icon: IconLaw,
     title: '極簡法典',
     description: '常見國考需適用法條',
