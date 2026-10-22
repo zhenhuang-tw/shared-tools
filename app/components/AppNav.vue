@@ -25,7 +25,9 @@
           :aria-label="isDark ? '切換亮色模式' : '切換暗色模式'"
           @click="toggleTheme"
         >
-          {{ isDark ? '☀️' : '🌙' }}
+          <!-- 圖示由 CSS 依 data-theme 切換，避免 hydration 前顯示錯誤圖示 -->
+          <span class="theme-icon-sun" aria-hidden="true">☀️</span>
+          <span class="theme-icon-moon" aria-hidden="true">🌙</span>
         </button>
       </li>
     </ul>
@@ -37,15 +39,10 @@ const appConfig = useAppConfig()
 
 const isDark = ref(false)
 
-// 初始化：讀取系統偏好或本地儲存
+// data-theme 已由 nuxt.config.ts 中的 inline script 在首次繪製前設定，
+// 這裡只需同步元件狀態
 onMounted(() => {
-  const stored = localStorage.getItem('theme')
-  if (stored) {
-    isDark.value = stored === 'dark'
-  } else {
-    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
-  }
-  applyTheme()
+  isDark.value = document.documentElement.getAttribute('data-theme') === 'dark'
 })
 
 function toggleTheme() {
@@ -86,5 +83,17 @@ function applyTheme() {
   padding: 0.25rem;
   font-size: 1.1rem;
   line-height: 1;
+}
+
+.theme-icon-sun {
+  display: none;
+}
+
+:root[data-theme='dark'] .theme-icon-sun {
+  display: inline;
+}
+
+:root[data-theme='dark'] .theme-icon-moon {
+  display: none;
 }
 </style>

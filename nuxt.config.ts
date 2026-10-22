@@ -29,6 +29,13 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: 'icon', type: 'image/png', sizes: '16x16', href: 'https://zhenhuang.tw/icon/favicon-16x16.png' }
+      ],
+      script: [
+        {
+          // 在首次繪製前依本地儲存或系統偏好設定 data-theme，避免主題閃爍 (FOUC)
+          innerHTML: `(function(){try{var t=localStorage.getItem('theme');if(t!=='dark'&&t!=='light'){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})()`,
+          tagPosition: 'head',
+        }
       ]
     }
   },
